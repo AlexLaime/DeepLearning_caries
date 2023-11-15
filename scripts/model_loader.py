@@ -1,13 +1,14 @@
+# Developed by Mirko J. Rodríguez mirko.rodriguezm@gmail.com
 
 # ------------------------
 # Cargando modelo de disco
 # ------------------------
 import tensorflow as tf
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 def cargarModelo():
 
-    FILENAME_MODEL_TO_LOAD = "caries_model_full.h5"
+    FILENAME_MODEL_TO_LOAD = "covid19_model_full.h5"
     MODEL_PATH = "../../model"
 
     # Cargar la RNA desde disco
