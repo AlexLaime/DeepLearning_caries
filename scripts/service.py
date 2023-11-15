@@ -38,7 +38,7 @@ def allowed_file(filename):
 def main_page():
 	return '¡Servicio REST activo!'
 
-@app.route('/model/covid19/', methods=['GET','POST'])
+@app.route('/model/caries/', methods=['GET','POST'])
 def default():
     data = {"success": False}
     if request.method == "POST":
