@@ -4,8 +4,8 @@
 # Cargando modelo de disco
 # ------------------------
 import tensorflow as tf
-from keras.models import load_model
-# from tensorflow.keras.models import load_model
+# from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 def cargarModelo():
 
