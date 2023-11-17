@@ -1,13 +1,12 @@
 # Developed by Mirko J. Rodríguez mirko.rodriguezm@gmail.com
 #Reference: https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-and-flask-508ba00f1037
+
 #Import Flask
 from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
 
 #Import Keras
-# from keras.preprocessing import image
-from tensorflow.keras.preprocessing import image
-
+from keras.preprocessing import image
 
 #Import python files
 import numpy as np
@@ -70,7 +69,7 @@ def default():
             	
 		# Resultados
             	prediction = 1 if (result >= 0.5) else 0
-            	CLASSES = ['Normal', 'Caries']
+            	CLASSES = ['Caries', 'Normal']
 
             	ClassPred = CLASSES[prediction]
             	ClassProb = result
