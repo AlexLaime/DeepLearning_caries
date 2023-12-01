@@ -91,26 +91,31 @@ def default():
 
 
 
+from flask import Flask, jsonify
+import os
+
+app = Flask(__name__)
+app.config['images'] = '/absolute/path/to/'
+
 @app.route('/list_images/', methods=['GET'])
 def list_images():
     data = {"success": False, "image_names": []}
-
     # Ruta de la carpeta de imágenes
-    folder_path = os.path.join(app.config['images/uploads'])
+    folder_path = os.path.join(app.config['images'], 'uploads')
+
+    # Check if the folder exists
+    if not os.path.exists(folder_path):
+        return jsonify({"success": False, "error": "Folder not found"})
 
     # Lista de archivos en la carpeta
     images = os.listdir(folder_path)
-
     for image_name in images:
         data["image_names"].append(image_name)
-
     data["success"] = True
-
     return jsonify(data)
 
-
-
-
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 
