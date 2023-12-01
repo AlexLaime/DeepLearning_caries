@@ -10,6 +10,8 @@ from keras.preprocessing import image
 
 #Import python files
 import numpy as np
+from flask import Flask, jsonify
+import os
 
 import requests
 import json
@@ -91,8 +93,7 @@ def default():
 
 
 
-from flask import Flask, jsonify
-import os
+
 
 app = Flask(__name__)
 app.config['images'] = '/absolute/path/to/'
