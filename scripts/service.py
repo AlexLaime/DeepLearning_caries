@@ -98,8 +98,8 @@ def default():
 
 # Nuevo endpoint para obtener el listado de imágenes
 # Nuevo endpoint para obtener el listado de imágenes
-@app.route('/model/caries/images', methods=['GET', 'POST'])
-def default():
+@app.route('/images', methods=['GET', 'POST'])
+def get_image_list():
     data = {"success": False}
     return jsonify(data)
 
