@@ -11,15 +11,7 @@ from keras.preprocessing import image
 #Import python files
 import numpy as np
 
-
 import os
-from flask import Flask, request, jsonify
-
-app = Flask(__name__)
-
-UPLOAD_FOLDER = 'images/uploads/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 
 
 import requests
@@ -104,6 +96,7 @@ def default():
 
 
 
+# Nuevo endpoint para obtener el listado de imágenes
 # Nuevo endpoint para obtener el listado de imágenes
 @app.route('/model/caries/images', methods=['GET'])
 def get_image_list():
