@@ -2,7 +2,7 @@
 #Reference: https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-and-flask-508ba00f1037
 
 #Import Flask
-from flask import Flask, request, jsonify, redirect
+from flask import Flask, request, jsonify, url_for, redirect
 from flask_cors import CORS
 
 #Import Keras
@@ -99,9 +99,15 @@ def default():
 @app.route('/images', methods=['GET', 'POST'])
 def get_image_list():
     data = {"success": False}
+    
     try:
         image_list = os.listdir(app.config['UPLOAD_FOLDER'])
-        data["image_list"] = image_list
+        
+        # Crear URLs completas para cada imagen
+        base_url = request.url_root.rstrip('/')
+        image_urls = [base_url + url_for('uploaded_image', filename=image) for image in image_list]
+
+        data["image_list"] = image_urls
         data["success"] = True
     except Exception as e:
         data["error"] = str(e)
