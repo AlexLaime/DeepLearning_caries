@@ -107,6 +107,6 @@ def get_image_list():
     
     return jsonify(data)
 
-    if __name__ == '__main__':
-# Run de application
-app.run(host='0.0.0.0',port=port, threaded=False)
+if __name__ == '__main__':
+    # Run de application
+    app.run(host='0.0.0.0',port=port, threaded=False, debug=True)
