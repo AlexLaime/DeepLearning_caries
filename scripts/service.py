@@ -10,8 +10,17 @@ from keras.preprocessing import image
 
 #Import python files
 import numpy as np
-from flask import Flask, jsonify
+
+
 import os
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+UPLOAD_FOLDER = 'images/uploads/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
 
 import requests
 import json
@@ -95,29 +104,25 @@ def default():
 
 
 
-app = Flask(__name__)
-app.config['images'] = '/absolute/path/to/'
-
-@app.route('/list_images/', methods=['GET'])
-def list_images():
-    data = {"success": False, "image_names": []}
-    # Ruta de la carpeta de imágenes
-    folder_path = os.path.join(app.config['images'], 'uploads')
-
-    # Check if the folder exists
-    if not os.path.exists(folder_path):
-        return jsonify({"success": False, "error": "Folder not found"})
-
-    # Lista de archivos en la carpeta
-    images = os.listdir(folder_path)
-    for image_name in images:
-        data["image_names"].append(image_name)
-    data["success"] = True
+# Nuevo endpoint para obtener el listado de imágenes
+@app.route('/model/caries/images', methods=['GET'])
+def get_image_list():
+    data = {"success": False}
+    
+    try:
+        image_list = os.listdir(app.config['UPLOAD_FOLDER'])
+        
+        data["image_list"] = image_list
+        data["success"] = True
+    except Exception as e:
+        data["error"] = str(e)
+    
     return jsonify(data)
+
+# ... Más código ...
 
 if __name__ == '__main__':
     app.run(debug=True)
-
 
 
 # Run de application
