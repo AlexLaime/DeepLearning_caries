@@ -11,8 +11,6 @@ from keras.preprocessing import image
 #Import python files
 import numpy as np
 
-import os
-
 
 import requests
 import json
