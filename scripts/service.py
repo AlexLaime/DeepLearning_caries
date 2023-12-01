@@ -87,5 +87,33 @@ def default():
 
     return jsonify(data)
 
+
+
+
+
+@app.route('/list_images/', methods=['GET'])
+def list_images():
+    data = {"success": False, "image_names": []}
+
+    # Ruta de la carpeta de imágenes
+    folder_path = os.path.join(app.config['images/uploads'])
+
+    # Lista de archivos en la carpeta
+    images = os.listdir(folder_path)
+
+    for image_name in images:
+        data["image_names"].append(image_name)
+
+    data["success"] = True
+
+    return jsonify(data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
 # Run de application
 app.run(host='0.0.0.0',port=port, threaded=False)
