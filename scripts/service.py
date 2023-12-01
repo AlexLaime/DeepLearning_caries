@@ -98,21 +98,10 @@ def default():
 
 # Nuevo endpoint para obtener el listado de imágenes
 # Nuevo endpoint para obtener el listado de imágenes
-@app.route('/model/caries/images', methods=['GET'])
-def get_image_list():
-    # data = {"success": False}
-    
-    # try:
-        # image_list = os.listdir(app.config['UPLOAD_FOLDER'])
-        
-        # data["image_list"] = image_list
-    data["success"] = True
-    # except Exception as e:
-    #     data["error"] = str(e)
-    
+@app.route('/model/caries/images', methods=['GET', 'POST'])
+def default():
+    data = {"success": False}
     return jsonify(data)
-
-
 
 # Run de application
 app.run(host='0.0.0.0',port=port, threaded=False)
