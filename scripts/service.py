@@ -34,8 +34,6 @@ cloudinary.config(
 );
 
 
-
-
 port = int(os.getenv('PORT', 5000))
 print ("Port recognized: ", port)
 
@@ -57,32 +55,53 @@ def main_page():
 @app.route('/model/caries/', methods=['GET','POST'])
 def default():
     data = {"success": False}
-    if 'file' not in request.files:
-        print('No file part')
-        return jsonify(data), 400
+    if request.method == "POST":
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            print('No file part')
+        file = request.files['file']
+        # if user does not select file, browser also submit a empty part without filename
+        if file.filename == '':
+            print('No selected file')
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+             # Sube la imagen a Cloudinary
+            cloudinary_response = upload(file)
+            cloudinary_url = cloudinary_response['secure_url']
+            print("URL de Cloudinary:", cloudinary_url)
 
-    file = request.files['file']
-    if file.filename == '':
-        print('No selected file')
-        return jsonify(data), 400
+            #loading image
+            filename = UPLOAD_FOLDER + '/' + filename
+            print("\nfilename:",filename)
 
-    if file and allowed_file(file.filename):
-        # Guarda la imagen localmente (opcional, dependiendo de tus necesidades)
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_to_predict = image.load_img(filename, target_size=(224, 224))
+            test_image = image.img_to_array(image_to_predict)
+            test_image = np.expand_dims(test_image, axis = 0)
+            test_image = test_image.astype('float32')
+            test_image /= 255
 
-        # Sube la imagen a Cloudinary
-        cloudinary_response = upload(file)
-        cloudinary_url = cloudinary_response['secure_url']
-        print("URL de Cloudinary:", cloudinary_url)
+            with graph.as_default():
+            	result = loaded_model.predict(test_image)[0][0]
+            	# print(result)
+            	
+		# Resultados
+            	prediction = 1 if (result >= 0.5) else 0
+            	CLASSES = ['Normal', 'Caries']
 
-        # Resto de tu código para cargar la imagen y realizar predicciones
-        # ...
+            	ClassPred = CLASSES[prediction]
+            	ClassProb = result
+            	
+            	print("Pedicción:", ClassPred)
+            	print("Prob: {:.2%}".format(ClassProb))
 
-        # Aquí puedes usar cloudinary_url en lugar de la ruta local si es necesario
+            	#Results as Json
+            	data["predictions"] = []
+            	r = {"label": ClassPred, "score": float(ClassProb)}
+            	data["predictions"].append(r)
 
-        # Success
-        data["success"] = True
+            	#Success
+            	data["success"] = True
 
     return jsonify(data)
 
