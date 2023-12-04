@@ -16,6 +16,8 @@ import json
 import os
 from werkzeug.utils import secure_filename
 from model_loader import cargarModelo
+import cloudinary
+from cloudinary.uploader import upload
 
 UPLOAD_FOLDER = '../images/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -25,6 +27,11 @@ print ("Port recognized: ", port)
 
 #Initialize the application service
 app = Flask(__name__)
+cloudinary.config(
+    cloud_name="dvasik8ut",
+    api_key="319746686451239",
+    api_secret="gBCoSvDpjx4gAYvgEHnFKhhs1eA"
+)
 CORS(app)
 global loaded_model, graph
 loaded_model, graph = cargarModelo()
@@ -52,7 +59,10 @@ def default():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
+            
+            cloudinary_response = upload(file)
+            cloudinary_url = cloudinary_response['secure_url']
+            print("URL de Cloudinary:", cloudinary_url)
             #loading image
             filename = UPLOAD_FOLDER + '/' + filename
             print("\nfilename:",filename)
