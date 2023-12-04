@@ -15,14 +15,13 @@ import numpy as np
 
 import requests
 import json
-import os
 
-import cloudinary
-from cloudinary.uploader import upload
 
 from werkzeug.utils import secure_filename
 from model_loader import cargarModelo
-
+import os
+import cloudinary
+from cloudinary.uploader import upload
 UPLOAD_FOLDER = '../images/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
