@@ -16,9 +16,9 @@ import numpy as np
 import requests
 import json
 import os
+
 import cloudinary
-import cloudinary.uploader
-import cloudinary.api
+from cloudinary.uploader import upload
 
 from werkzeug.utils import secure_filename
 from model_loader import cargarModelo
