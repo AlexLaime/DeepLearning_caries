@@ -11,14 +11,15 @@ from keras.preprocessing import image
 #Import python files
 import numpy as np
 
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 
 
 import requests
 import json
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 from werkzeug.utils import secure_filename
 from model_loader import cargarModelo
 
@@ -26,11 +27,11 @@ UPLOAD_FOLDER = '../images/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
-cloudinary.config({
+cloudinary.config(
     cloud_name: "dvasik8ut",
     api_key: "319746686451239",
     api_secret: "gBCoSvDpjx4gAYvgEHnFKhhs1eA"
-  });
+);
 
 
 
