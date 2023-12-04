@@ -20,17 +20,17 @@ import json
 from werkzeug.utils import secure_filename
 from model_loader import cargarModelo
 import os
-import cloudinary
-from cloudinary.uploader import upload
+# import cloudinary
+# from cloudinary.uploader import upload
 UPLOAD_FOLDER = '../images/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
-cloudinary.config(
-    cloud_name="dvasik8ut",
-    api_key="319746686451239",
-    api_secret="gBCoSvDpjx4gAYvgEHnFKhhs1eA"
-);
+# cloudinary.config(
+#     cloud_name="dvasik8ut",
+#     api_key="319746686451239",
+#     api_secret="gBCoSvDpjx4gAYvgEHnFKhhs1eA"
+# );
 
 
 port = int(os.getenv('PORT', 5000))
@@ -66,9 +66,9 @@ def default():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
              # Sube la imagen a Cloudinary
-            cloudinary_response = upload(file)
-            cloudinary_url = cloudinary_response['secure_url']
-            print("URL de Cloudinary:", cloudinary_url)
+            # cloudinary_response = upload(file)
+            # cloudinary_url = cloudinary_response['secure_url']
+            # print("URL de Cloudinary:", cloudinary_url)
 
             #loading image
             filename = UPLOAD_FOLDER + '/' + filename
