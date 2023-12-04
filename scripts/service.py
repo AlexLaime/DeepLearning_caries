@@ -28,9 +28,9 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
 cloudinary.config(
-    cloud_name: "dvasik8ut",
-    api_key: "319746686451239",
-    api_secret: "gBCoSvDpjx4gAYvgEHnFKhhs1eA"
+    cloud_name="dvasik8ut",
+    api_key="319746686451239",
+    api_secret="gBCoSvDpjx4gAYvgEHnFKhhs1eA"
 );
 
 
