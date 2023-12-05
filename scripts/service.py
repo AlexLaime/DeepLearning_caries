@@ -17,8 +17,8 @@ import os
 from werkzeug.utils import secure_filename
 from model_loader import cargarModelo
 import cloudinary
-from cloudinary.uploader
-import cloudinary.api
+from cloudinary.uploader import upload
+from cloudinary.api import api
 
 UPLOAD_FOLDER = '../images/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -64,6 +64,11 @@ def default():
             cloudinary_response = upload(file)
             cloudinary_url = cloudinary_response['secure_url']
             print("URL de Cloudinary:", cloudinary_url)
+            except cloudinary.exceptions.Error as e:
+            print(f"Error al subir a Cloudinary: {e}")
+            return jsonify(data), 500 
+
+
             #loading image
             filename = UPLOAD_FOLDER + '/' + filename
             print("\nfilename:",filename)
