@@ -64,7 +64,7 @@ def default():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-                upload(filename)
+                upload(file)
                 print("Hola alex")
                 # cloudinary_url = cloudinary_response['url']
 
