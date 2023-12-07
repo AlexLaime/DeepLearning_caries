@@ -74,7 +74,7 @@ def default():
                 print("Prob: {:.2%}".format(ClassProb))
 
                 # Results as Json
-                r = {"label": ClassPred, "score": float(ClassProb)}
+                r = {"label": ClassPred, "score": float(ClassProb), "imagen": filename}
                 data["predictions"].append(r)
 
         # Success

@@ -16,31 +16,37 @@
     </div>
   </md-toolbar>
 
-  <form name="myForm">
+  <form name="myForm" enctype="multipart/form-data">
     <md-card style="margin-bottom:0px">
       <md-card-content>
         <div style="margin-bottom:16px" layout="column" layout-align="center">
           <span style="font-weight:bold;font-size:13">Imagen:</span>
-          <input type="file" name="file" ng-model="cn" class="form-control" onchange="loadFile(event)" accept=".jpg,.jpeg,.png" style="font-size:13">
+          <input type="file" name="file" ng-model="cn" class="form-control" ng-change="loadFiles()" accept=".jpg,.jpeg,.png" style="font-size:13" multiple>
         </div>
-
-        <div  layout="column" layout-align="space-between center">
-          <img id="imagen" class="img-responsive"/>
+  
+        <div layout="column" layout-align="space-between center">
+          <img ng-src="{{image.src}}" class="img-responsive" ng-repeat="image in images"/>
         </div>
       </md-card-content>
-
+  
       <md-card-actions layout="row" layout-align="end center">
         <md-button ng-click="submit()" class="md-accent md-raised">Clasificar</md-button>
       </md-card-actions>
     </md-card>
-    </form>
+  </form>
 
     <md-card layout="row" layout-align="center" style="margin-top:0px">
       <md-card-content>
         <div id="resultadosdiv" >
-            <div ng-show="success">
-                  <span style="color:blue;font-weight:bold">{: predictions[0].label :}</span>   <span style="color:blue">(score: {: predictions[0].score :})</span>
-            </div>
+          <div ng-show="success">
+            <div ng-repeat="prediction in predictions">
+              <span style="color:blue; font-weight:bold">{: prediction.label  :}</span> <br>
+              <span style="color:blue"> Score:  {: prediction.score :}</span><br><br><br>
+          </div>
+          <!-- <pre>{: predictions | json :}</pre> -->
+
+
+          </div>
             <div ng-show="error">
                   <span style="color:red;font-weight:bold">Error!</span>
             </div>
@@ -56,75 +62,98 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
   <script>
-    var loadFile = function(event) {
-      var output = document.getElementById('imagen');
-      output.src = URL.createObjectURL(event.target.files[0]);
-      var x = document.getElementById("resultadosdiv");
-      x.style.display = "none";
-    };
+    var loadFiles = function(event) {
+    var output = document.getElementById('imagen');
+    output.style.display = "block";  // Show the container for images
+    var files = event.target.files;
+    console.log(files);
+    console.log('hola alex');
+
+    $scope.images = [];  // Array to store image sources
+
+    for (var i = 0; i < files.length; i++) {
+      var imageSrc = URL.createObjectURL(files[i]);
+      $scope.images.push({ src: imageSrc });
+      console.log(imageSrc);
+      console.log('hooola');
+    }
+    
+    var x = document.getElementById("resultadosdiv");
+    x.style.display = "none";
+  };
   </script>
-  <script>
-    var app = angular.module('myApp', ['ngMaterial']);
 
-    app.config(['$interpolateProvider', function($interpolateProvider) {
-      $interpolateProvider.startSymbol('{:');
-      $interpolateProvider.endSymbol(':}');
-    }]);
+<script>
+    console.log('hola alex');
 
-    app.config(function($mdThemingProvider) {
-      $mdThemingProvider.theme('default')
-        .primaryPalette('blue-grey')
-        .accentPalette('orange');
-    });
+  var app = angular.module('myApp', ['ngMaterial']);
 
-    app.controller('myCtrl', ['$scope', '$http',
-      function($scope, $http) {
-        $scope.rp = "http://34.42.21.123:5000";
-        $scope.loading = false;
+  app.config(['$interpolateProvider', function($interpolateProvider) {
+    $interpolateProvider.startSymbol('{:');
+    $interpolateProvider.endSymbol(':}');
+  }]);
+
+  app.config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+      .primaryPalette('blue-grey')
+      .accentPalette('orange');
+  });
+
+  app.controller('myCtrl', ['$scope', '$http',
+    function($scope, $http) {
+      $scope.rp = "http://34.42.21.123:5000";
+      $scope.loading = false;
+      $scope.success = false;
+      $scope.error = false;
+      $scope.images = [];
+
+      $scope.submit = function () {
+
+        var x = document.getElementById("resultadosdiv");
+        x.style.display = "block";
+        $scope.loading = true;
         $scope.success = false;
-      	$scope.error = false;
+        $scope.error = false;
 
-        console.log("Loading ...");
+        var myform = document.forms['myForm'];
+        var formData = new FormData(myform);
 
-        $scope.submit = function() {
-          var x = document.getElementById("resultadosdiv");
-          x.style.display = "block";
-          $scope.loading = true;
+        URI_final = $scope.rp + "/model/caries/";
+        console.log(URI_final);
+        console.log("Calling ...");
+        $http({
+          method: 'POST',
+          url: URI_final,
+          headers: {
+            'Content-Type': undefined
+          },
+          data: formData
+        }).then(function (response) {
+          $scope.predictions = response.data.predictions;
+          console.log(response.data.predictions);
+          $scope.loading = false;
+          $scope.success = true;
+          $scope.error = false;
+        }, function (error) {
+          $scope.loading = false;
           $scope.success = false;
-        	$scope.error = false;
-
-          var myform = document.forms['myForm'];
-          var formData = new FormData(myform);
-          console.log(myform)
-
-          URI_final = $scope.rp + "/model/caries/";
-          console.log(URI_final);
-          console.log("Calling ...");
-          $http({
-            method : 'POST',
-            url : URI_final,
-            headers: {
-                'Content-Type': undefined
-            },
-            data: formData
-          }).success(function(data, status, headers, config) {
-            $scope.predictions = data.predictions;
-            console.log(data.predictions);
-            $scope.loading = false;
-            $scope.success = true;
-          	$scope.error = false;
-          }).error(function(data, status, headers, config) {
-            $scope.loading = false;
-            $scope.success = false;
-            $scope.error = true;
-          });
-
-        }
-
-        console.log("Loaded!");
+          $scope.error = true;
+        });
       }
-    ]);
-  </script>
+
+      $scope.loadFiles = function () {
+        $scope.images = [];
+        angular.forEach($scope.cn, function (file) {
+          var src = URL.createObjectURL(file);
+          $scope.images.push({ src: src });
+        });
+
+        var x = document.getElementById("resultadosdiv");
+        x.style.display = "none";
+      }
+    }
+  ]);
+</script>
 
 
 </body>
