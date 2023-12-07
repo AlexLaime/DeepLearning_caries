@@ -26,14 +26,18 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 port = int(os.getenv('PORT', 5000))
 print ("Port recognized: ", port)
 
-#Initialize the application service
-app = Flask(__name__)
 
 cloudinary.config(
     cloud_name="dvasik8ut",
     api_key="319746686451239",
     api_secret="gBCoSvDpjx4gAYvgEHnFKhhs1eA"
 )
+
+
+#Initialize the application service
+app = Flask(__name__)
+
+
 
 CORS(app)
 global loaded_model, graph
