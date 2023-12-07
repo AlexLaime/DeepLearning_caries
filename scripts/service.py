@@ -4,7 +4,7 @@
 #Import Flask
 from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
-
+import cloudinary
 #Import Keras
 from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
