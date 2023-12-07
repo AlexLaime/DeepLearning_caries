@@ -67,7 +67,6 @@ def default():
                 # upload(file)
 
                 print("Hola alex")
-                print(file)
                 # cloudinary_url = cloudinary_response['url']
 
                 # loading image
