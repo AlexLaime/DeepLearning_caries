@@ -65,9 +65,9 @@ def default():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
                 # Ruta completa al archivo
-                filename = UPLOAD_FOLDER + '/' + filename
+                # filename = UPLOAD_FOLDER + '/' + filename
                 # Carga de la imagen a Cloudinary
-                uploaded_file = upload(filename)
+                # uploaded_file = upload(filename)
 
 
                 # loading image
