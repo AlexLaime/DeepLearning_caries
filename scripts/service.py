@@ -64,8 +64,9 @@ def default():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-                cloudinary_response = upload(filename)
-                cloudinary_url = cloudinary_response['url']
+                upload(filename)
+                print("Hola alex")
+                # cloudinary_url = cloudinary_response['url']
 
                 # loading image
                 filename = UPLOAD_FOLDER + '/' + filename
