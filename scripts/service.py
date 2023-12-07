@@ -6,6 +6,9 @@ from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
 
 #Import Keras
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
+
 from keras.preprocessing import image
 
 #Import python files
@@ -25,6 +28,13 @@ print ("Port recognized: ", port)
 
 #Initialize the application service
 app = Flask(__name__)
+
+cloudinary.config(
+    cloud_name="dvasik8ut",
+    api_key="319746686451239",
+    api_secret="gBCoSvDpjx4gAYvgEHnFKhhs1eA"
+)
+
 CORS(app)
 global loaded_model, graph
 loaded_model, graph = cargarModelo()

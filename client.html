@@ -40,8 +40,10 @@
         <div id="resultadosdiv" >
           <div ng-show="success">
             <div ng-repeat="prediction in predictions">
-              <span style="color:blue; font-weight:bold">{: prediction.label  :}</span> <br>
-              <span style="color:blue"> Score:  {: prediction.score :}</span><br><br><br>
+              <span style="color:blue">Prediccion: {: prediction.label  :}</span> <br>
+              <span style="color:blue"> Score:  {: prediction.score :}</span><br>
+              <span style="color:blue">Ruta imagen: {: prediction.imagen  :}</span> <br>
+              <br><br>
           </div>
           <!-- <pre>{: predictions | json :}</pre> -->
 
