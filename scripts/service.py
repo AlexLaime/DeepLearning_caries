@@ -38,52 +38,47 @@ def allowed_file(filename):
 def main_page():
 	return '¡Servicio REST activo!'
 
-@app.route('/model/caries/', methods=['GET','POST'])
+@app.route('/model/caries/', methods=['POST'])
 def default():
-    data = {"success": False}
+    data = {"success": False, "predictions": []}
+
     if request.method == "POST":
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            print('No file part')
-        file = request.files['file']
-        # if user does not select file, browser also submit a empty part without filename
-        if file.filename == '':
-            print('No selected file')
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        files = request.files.getlist('file')  # Get list of files
 
-            #loading image
-            filename = UPLOAD_FOLDER + '/' + filename
-            print("\nfilename:",filename)
+        for file in files:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            image_to_predict = image.load_img(filename, target_size=(224, 224))
-            test_image = image.img_to_array(image_to_predict)
-            test_image = np.expand_dims(test_image, axis = 0)
-            test_image = test_image.astype('float32')
-            test_image /= 255
+                # loading image
+                filename = UPLOAD_FOLDER + '/' + filename
+                print("\nfilename:", filename)
 
-            with graph.as_default():
-            	result = loaded_model.predict(test_image)[0][0]
-            	# print(result)
-            	
-		# Resultados
-            	prediction = 1 if (result >= 0.5) else 0
-            	CLASSES = ['Normal', 'Caries']
+                image_to_predict = image.load_img(filename, target_size=(224, 224))
+                test_image = image.img_to_array(image_to_predict)
+                test_image = np.expand_dims(test_image, axis=0)
+                test_image = test_image.astype('float32')
+                test_image /= 255
 
-            	ClassPred = CLASSES[prediction]
-            	ClassProb = result
-            	
-            	print("Pedicción:", ClassPred)
-            	print("Prob: {:.2%}".format(ClassProb))
+                with graph.as_default():
+                    result = loaded_model.predict(test_image)[0][0]
 
-            	#Results as Json
-            	data["predictions"] = []
-            	r = {"label": ClassPred, "score": float(ClassProb)}
-            	data["predictions"].append(r)
+                # Results
+                prediction = 1 if (result >= 0.5) else 0
+                CLASSES = ['Normal', 'Caries']
 
-            	#Success
-            	data["success"] = True
+                ClassPred = CLASSES[prediction]
+                ClassProb = result
+
+                print("Prediction:", ClassPred)
+                print("Prob: {:.2%}".format(ClassProb))
+
+                # Results as Json
+                r = {"label": ClassPred, "score": float(ClassProb)}
+                data["predictions"].append(r)
+
+        # Success
+        data["success"] = True
 
     return jsonify(data)
 
