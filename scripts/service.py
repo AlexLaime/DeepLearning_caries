@@ -1,4 +1,3 @@
-# Developed by Mirko J. Rodríguez mirko.rodriguezm@gmail.com
 #Reference: https://towardsdatascience.com/deploying-keras-models-using-tensorflow-serving-and-flask-508ba00f1037
 
 #Import Flask
@@ -71,6 +70,7 @@ def default():
 
                 # loading image
                 filename = UPLOAD_FOLDER + '/' + filename
+                filename2 = filename
                 print("\nfilename:", filename)
 
                 image_to_predict = image.load_img(filename, target_size=(224, 224))
@@ -93,7 +93,7 @@ def default():
                 print("Prob: {:.2%}".format(ClassProb))
 
                 # Results as Json
-                r = {"label": ClassPred, "score": float(ClassProb), "imagen": filename}
+                r = {"label": ClassPred, "score": float(ClassProb), "imagen": filename2}
                 data["predictions"].append(r)
 
         # Success

@@ -1,4 +1,3 @@
-# Developed by Mirko J. Rodríguez mirko.rodriguezm@gmail.com
 
 # ------------------------
 # Cargando modelo de disco
