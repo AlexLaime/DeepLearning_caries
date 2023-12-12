@@ -65,12 +65,11 @@ def default():
 
                 # upload(file)
 
-                print("Hola alex")
                 # cloudinary_url = cloudinary_response['url']
 
                 # loading image
-                filename = UPLOAD_FOLDER + '/' + filename
                 filename2 = filename
+                filename = UPLOAD_FOLDER + '/' + filename
                 print("\nfilename:", filename)
 
                 image_to_predict = image.load_img(filename, target_size=(224, 224))
